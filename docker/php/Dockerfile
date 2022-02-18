@@ -16,6 +16,8 @@ RUN apt-get update \
     && pecl install imagick \
     && docker-php-ext-enable imagick \
     && pecl install mcrypt-1.0.3 \
+    && pecl install xdebug \
+    && docker-php-ext-enable xdebug \
     && docker-php-ext-enable mcrypt \
     && docker-php-ext-install soap \
         bcmath \
@@ -29,6 +31,8 @@ RUN docker-php-ext-configure gd --with-jpeg=DIR --with-freetype=/usr/lib64/ \
 
 RUN docker-php-ext-configure intl \
     && docker-php-ext-install intl
+
+COPY ./xdebug/php-ext-xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 RUN a2enmod rewrite
 
