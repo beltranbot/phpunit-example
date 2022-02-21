@@ -7,7 +7,12 @@ services:
             dockerfile: Dockerfile
             args:
                 WWWGROUP: '${WWWGROUP:-1337}'
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
         ports:
             - "80:80"
         volumes:
             - .:/var/www/html
+            - ./docker/php/xdebug/php-ext-xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+        environment:
+            XDEBUG_MODE: "${XDEBUG_MODE:-debug}"

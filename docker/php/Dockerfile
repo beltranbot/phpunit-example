@@ -1,5 +1,7 @@
 FROM php:7.4-apache
 
+ARG WWWGROUP
+
 RUN apt-get update \
     && apt-get install -y \
         libmcrypt-dev \
@@ -32,7 +34,7 @@ RUN docker-php-ext-configure gd --with-jpeg=DIR --with-freetype=/usr/lib64/ \
 RUN docker-php-ext-configure intl \
     && docker-php-ext-install intl
 
-COPY ./xdebug/php-ext-xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+# COPY ./xdebug/php-ext-xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 RUN a2enmod rewrite
 
@@ -42,4 +44,7 @@ RUN chmod 777 /var/www
 
 RUN chmod 777 /var/www/html
 
-USER www-data
+RUN groupadd --force -g $WWWGROUP sail
+RUN useradd -ms /bin/bash --no-user-group -g $WWWGROUP -u 1337 sail
+
+USER sail
